@@ -87,7 +87,10 @@ h6{
 a{
     display:inline-block
 }
-
+a:link { 
+    text-decoration: none;
+    display:inline-block      
+}
 a:active,a:focus,a:hover{
     text-decoration:none;
     outline:0
