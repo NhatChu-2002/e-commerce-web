@@ -12,6 +12,40 @@
     -moz-box-sizing:border-box;
     box-sizing:border-box
 }
+.product-card {
+    max-width: 300px; /* Adjust the max-width to control the card's overall size */
+    margin: 20px; /* Add some margin around the card */
+    padding: 20px; /* Add padding inside the card */
+
+    /* Optional: To reduce font size for a more compact look */
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.button-container {
+    display: flex;
+    justify-content: center; /* Centers content horizontally */
+    margin-top: auto; /* Pushes the button to the bottom of the card */
+}
+.card-img-top {
+    max-height: 200px; /* Adjust the max-height to control the image height */
+}
+
+.card-title {
+    font-size: 18px; /* Adjust font size for the title */
+    margin-bottom: 3px; /* Add a bit of space below the title */
+}
+
+.card-text.price {
+    font-size: 20px; /* Adjust font size for the price */
+    margin-bottom: 5px; /* Add a bit of space below the price */
+}
+
+.btn-primary.btn-sm {
+    font-size: 18px; /* Adjust font size for the button */
+    
+}
 
 body{
     font-family:Poppins,sans-serif;
