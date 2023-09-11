@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
+import { CartService } from 'src/app/services/cart.service';
 import { Luv2ShopFormService } from 'src/app/services/luv2-shop-form.service';
 import { Luv2ShopValidators } from 'src/app/validators/luv2-shop-validators';
 
@@ -25,11 +26,12 @@ export class CheckoutComponent implements OnInit {
 
   checkoutFormGroup: FormGroup;
   constructor(private formBuilder: FormBuilder,
-              private luv2shopFormService: Luv2ShopFormService) { }
+              private luv2shopFormService: Luv2ShopFormService,
+              private cartService: CartService) { }
 
   ngOnInit(): void {
 
-
+    this.reviewCartDetails();
 
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
@@ -61,17 +63,25 @@ export class CheckoutComponent implements OnInit {
       }),
 
       billingAddress: this.formBuilder.group({
-        street:[''],
-        city:[''],
-        state:[''],
-        country:[''],
-        zipCode:['']
+        street: new FormControl('',[Validators.required, 
+                                    Validators.minLength(2),
+                                    Luv2ShopValidators.notOnlyWhiteSpace]),
+        city: new FormControl('',[ Validators.required, 
+                                    Validators.minLength(2),
+                                    Luv2ShopValidators.notOnlyWhiteSpace]),
+        state: new FormControl('',[ Validators.required]),
+        country: new FormControl('',[ Validators.required]),
+        zipCode: new FormControl('',[Validators.required, 
+                                      Validators.minLength(2),
+                                      Luv2ShopValidators.notOnlyWhiteSpace]),
       }),
       creditCard: this.formBuilder.group({
-        cardType:[''],
-        nameOnCard:[''],
-        cardNumber:[''],
-        securityCode:[''],
+        cardType: new FormControl('',[Validators.required]),
+        nameOnCard:new FormControl('',[ Validators.required, 
+                                        Validators.minLength(2),
+                                        Luv2ShopValidators.notOnlyWhiteSpace]),
+        cardNumber:new FormControl('',[Validators.required, Validators.pattern('[0-9]{16}')]),
+        securityCode:new FormControl('',[Validators.required, Validators.pattern('[0-9]{3}')]),
         expirationMonth:[''],
         expirationYear:['']
       }),
@@ -103,6 +113,7 @@ export class CheckoutComponent implements OnInit {
       }
     );
   }
+  
   handleMonthAndYears()
   {
     const creditCardFormGroup = this.checkoutFormGroup.get('creditCard');
@@ -151,6 +162,18 @@ export class CheckoutComponent implements OnInit {
   get shippingAddressZipcode() { return this.checkoutFormGroup.get('shippingAddress.zipCode');}
   get shippingAddressCountry() { return this.checkoutFormGroup.get('shippingAddress.country');}
 
+  get billingAddressStreet() { return this.checkoutFormGroup.get('billingAddress.street');}
+  get billingAddressCity() { return this.checkoutFormGroup.get('billingAddress.city');}
+  get billingAddressState() { return this.checkoutFormGroup.get('billingAddress.state');}
+  get billingAddressZipcode() { return this.checkoutFormGroup.get('billingAddress.zipCode');}
+  get billingAddressCountry() { return this.checkoutFormGroup.get('billingAddress.country');}
+
+  get creditCardType() { return this.checkoutFormGroup.get('creditCard.cardType');}
+  get creditCardNameOnCard() { return this.checkoutFormGroup.get('creditCard.nameOnCard');}
+  get creditCardNumber() { return this.checkoutFormGroup.get('creditCard.cardNumber');}
+  get creditCardSecurityCode() { return this.checkoutFormGroup.get('creditCard.securityCode');}
+  
+
   copyShippingAddressToBillingAddress(event)
   {
     if(event.target.checked){
@@ -187,6 +210,15 @@ export class CheckoutComponent implements OnInit {
         //set first value by default
         formGroup.get('state').setValue(data[0]);
       }
+    );
+  }
+  reviewCartDetails() {
+    this.cartService.totalQuantity.subscribe(
+      totalQuantity => this.totalQuantity = totalQuantity
+    );
+
+    this.cartService.totalPrice.subscribe(
+      totalPrice => this.totalPrice = totalPrice
     );
   }
 
