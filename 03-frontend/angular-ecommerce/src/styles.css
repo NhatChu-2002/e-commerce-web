@@ -252,7 +252,7 @@ section{
 }
 
 .au-input-xl{
-    min-width:935px
+    min-width:750px
 }
 
 input.au-input.au-input-xl{
@@ -903,7 +903,7 @@ footer ul li{
         justify-content:center
     }
      .au-input-xl{
-        min-width:350px
+        min-width:300px
     }
       .logo{
         text-align:center
